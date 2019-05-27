@@ -28,6 +28,9 @@ class Queue {
     T peek();
     T pop();
     void clear();
+
+    void printQueue();
+    void pushToQueue(const T &item);
 };
 
 template<class T>
@@ -88,6 +91,32 @@ void Queue<T>::clear()
 }
 
 #endif
+
+// bulo
+template<class T>
+void Queue<T>::pushToQueue(const T &item)
+{
+  if(_count == _maxitems){
+     pop();
+  }
+  push(item);   
+}
+
+// bulo--
+template<class T>
+void Queue<T>::printQueue() {
+  int i = _front;
+  T result;
+  while(i != _back)
+  {
+    result = _data[i]; 
+    Serial.println(result); 
+    
+    i++;
+    if(i > _maxitems)
+      i = 0;
+  }
+}
 
 /*
 void setup()
