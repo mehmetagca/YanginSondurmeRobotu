@@ -64,7 +64,7 @@
 //const int sensorPin= 0;
 //int smoke_level;
 
-short usSpeed = 240;  //default motor speed
+short usSpeed = 100;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
 
 byte atesCikti = 1;
