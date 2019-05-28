@@ -41,3 +41,20 @@
 	else
 		return 0;
 }
+
+/*
+  String stringArray[10];
+  int i = 0;
+
+  while(queue.count() > 0){
+	stringArray[i] = queue.pop();
+
+	Serial.print(i);
+	Serial.print("String:");
+	Serial.print(stringArray[i]);
+
+	i++;
+  }
+
+  Serial.println(sinyalArtis(stringArray));
+*/
