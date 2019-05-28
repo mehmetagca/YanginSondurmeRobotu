@@ -71,7 +71,7 @@ byte atesCikti = 1;
 
 Queue<String> queue(10);
  
-void setup()                         
+void setup()
 {
   setupUltra();
   
@@ -178,19 +178,43 @@ void loop()
       Serial.println(rssi);
       
       rssi[3] = '\0';
-      queue.push(String(rssi));
+      queue.pushToQueue(String(rssi));
       
-      Serial.print("Queue[0]:");
-      Serial.println(queue.pop());
-      queue.push(String(rssi));
+      Serial.println("Queue;");
+      queue.printQueue();
     }
 
     if(millis() - sure > 5000)// 5sn
     {
       if(user_input == '1' && queue.count() > 0)//Engel yoksa
       {
-        Serial.println("\n\nKuyruk diziye donustu.\n\n");
-        Serial.println(queue.pop());
+        String stringArray[10];
+        int i = 0;
+      
+        while(queue.count() > 0)
+        {
+          stringArray[i] = queue.pop();
+        
+          Serial.print(i);
+          Serial.print("String:");
+          Serial.print(stringArray[i]);
+        
+          i++;
+        }
+
+        int sinyalArtisDegeri = sinyalArtis(stringArray); //0:azaliyor , 1:artiyor, -1:sinyal degerleri esit
+        if(sinyalArtisDegeri == 1)
+        {
+          Serial.println("Sensore yaklasiliyor, duz devam et.");
+        }
+        else if(sinyalArtisDegeri == 0)
+        {
+          Serial.println("Sensorden uzaklasiyor, donus yap.");
+        }
+        else
+        {
+          Serial.println("Sinyal degerleri esit! Donus yok.");
+        }
         sure = millis();
       }
     }
