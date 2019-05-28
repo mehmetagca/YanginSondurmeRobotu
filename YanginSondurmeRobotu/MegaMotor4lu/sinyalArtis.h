@@ -21,11 +21,10 @@
 			if (okunandeger > oncekideger) {
 				buyuk++;
 			}
-			else //TODO esit olma ihtimalinide ekle
+			else if (okunandeger < oncekideger)
 			{
 				kucuk++;
 			}
-
 		}
 
 		Serial.print("buyuk : ");
@@ -37,9 +36,11 @@
 	//while(1); // Sonsuz döngü, program kilitlendi.
 
 	if (buyuk > kucuk)
-		return 1;
-	else
-		return 0;
+		return 1; // return 1 : sinyal artıyor
+	else if(kucuk > buyuk) 
+		return 0; // return 0 : sinyal azalıyor
+  else
+    return -1; // return -1 : sinyal değerleri eşit     
 }
 
 /*
