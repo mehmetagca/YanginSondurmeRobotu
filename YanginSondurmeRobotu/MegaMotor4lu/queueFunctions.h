@@ -102,7 +102,7 @@ void Queue<T>::pushToQueue(const T &item)
   push(item);   
 }
 
-// bulo--
+// bulo
 template<class T>
 void Queue<T>::printQueue() {
   int i = _front;
@@ -117,6 +117,36 @@ void Queue<T>::printQueue() {
       i = 0;
   }
 }
+
+/*
+// bulo
+template<class T>
+String* Queue<T>::queueToStringArray() {
+  String stringArray[10];
+  int i = _front;
+  int j = 0;
+  T result;
+  while(i != _back){
+    result = _data[i]; 
+    stringArray[j] = result;
+
+    Serial.print(j);
+    //Serial.print(i);
+    Serial.print("String:");
+    Serial.print(stringArray[j]);
+    //Serial.println();
+    //Serial.print(_back);
+    //Serial.print(" , ");
+    //Serial.println(_maxitems);
+
+    j++;
+    i++;
+    if(i > _maxitems)
+      i = 0;
+  }
+  return stringArray;
+}
+*/
 
 /*
 void setup()
