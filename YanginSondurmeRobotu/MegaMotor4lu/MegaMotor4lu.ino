@@ -64,7 +64,7 @@
 //const int sensorPin= 0;
 //int smoke_level;
 
-short usSpeed = 100;  //default motor speed
+short usSpeed = 40;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
 
 byte atesCikti = 1;
@@ -178,10 +178,19 @@ void loop()
       Serial.println(rssi);
       
       rssi[3] = '\0';
-      queue.pushToQueue(String(rssi));
+      queue.pushToQueue(String(rssi));//Bu ana kuyruk olacak, diger kuyruklara ekleme asagidaki if de yapılacak.
       
       Serial.println("Queue;");
       queue.printQueue();
+    }
+    else if(serialBuffer[0] == '+') // IP Info
+    {
+      Serial.print("Gelen rssi IP:");
+      Serial.println(rssi);
+      
+      rssi[3] = '\0';
+
+      //TODO gelen ip bilgisine uygun diziye, rssi degeri push edilecek.
     }
 
     if(millis() - sure > 5000)// 5sn
@@ -210,6 +219,9 @@ void loop()
         else if(sinyalArtisDegeri == 0)
         {
           Serial.println("Sensorden uzaklasiyor, donus yap.");
+          //if
+          //sagadon
+          //soladon
         }
         else
         {
