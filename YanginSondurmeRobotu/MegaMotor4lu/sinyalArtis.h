@@ -43,6 +43,11 @@
     return -1; // return -1 : sinyal değerleri eşit     
 }
 
+double randBit(){
+    double r=((double)rand())/((double)RAND_MAX);
+    return r>0.5?1:0;
+}
+
 /*
   String stringArray[10];
   int i = 0;
