@@ -64,14 +64,15 @@
 //const int sensorPin= 0;
 //int smoke_level;
 
-short usSpeed = 100;  //default motor speed
+short usSpeed = 30;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
 
 byte atesCikti = 1;
 
 Queue<String> queue(10);
+byte sonSinyalDegeri = -1;
  
-void setup()                         
+void setup()
 {
   setupUltra();
   
@@ -146,7 +147,6 @@ void loop()
     if(Serial1.available())
       {
         rssi = Serial1.readStringUntil('\n');
-        //TODO: tum portu oku ve temizle
         Serial.print("Signal Value: ");
         Serial.println(rssi);
       }
@@ -178,19 +178,72 @@ void loop()
       Serial.println(rssi);
       
       rssi[3] = '\0';
-      queue.push(String(rssi));
+      queue.pushToQueue(String(rssi));//Bu ana kuyruk olacak, diger kuyruklara ekleme asagidaki if de yapılacak.
       
-      Serial.print("Queue[0]:");
-      Serial.println(queue.pop());
-      queue.push(String(rssi));
+      Serial.println("Queue;");
+      queue.printQueue();
+    }
+    else if(serialBuffer[0] == '+') // IP Info
+    {
+      Serial.print("Gelen rssi IP:");
+      Serial.println(rssi);
+      
+      rssi[3] = '\0';
+
+      //TODO gelen ip bilgisine uygun diziye, rssi degeri push edilecek.
     }
 
-    if(millis() - sure > 5000)// 5sn
+    if(millis() - sure > 3000)// 5sn
     {
+      while(Serial.available())//Flush Serial Rx Buffer
+        Serial.read();
+      
       if(user_input == '1' && queue.count() > 0)//Engel yoksa
       {
-        Serial.println("\n\nKuyruk diziye donustu.\n\n");
-        Serial.println(queue.pop());
+        String stringArray[10];
+        int i = 0;
+      
+        while(queue.count() > 0)//Queue to String Array
+        {
+          stringArray[i] = queue.pop();
+        
+          Serial.print(i);
+          Serial.print("String:");
+          Serial.print(stringArray[i]);
+          
+          if(queue.count() == 0)
+            sonSinyalDegeri = stringArray[i].toInt();
+            
+          i++;
+        }
+
+        int sinyalArtisDegeri = sinyalArtis(stringArray); //0:azaliyor , 1:artiyor, -1:sinyal degerleri esit
+        if(sinyalArtisDegeri == 1)
+        {
+          Serial.println("Sensore yaklasiliyor, duz devam et.");
+          if(sonSinyalDegeri != -1)
+            {
+              if(sonSinyalDegeri > -55)//Dur
+                {
+                  Stop();
+                  delay(10000);
+                  sonSinyalDegeri = -1;
+                }
+            }
+        }
+        else if(sinyalArtisDegeri == 0)
+        {
+          Serial.println("Sensorden uzaklasiyor, donus yap.");
+          TurnLeft();
+          delay(3000);
+          //if
+          //sagadon
+          //soladon
+        }
+        else
+        {
+          Serial.println("Sinyal degerleri esit! Donus yok.");
+        }
         sure = millis();
       }
     }
@@ -269,8 +322,8 @@ void TurnRight()
 {
    Serial.println("TurnRight");
   usMotor_Status = CW;
-  motorGo(MOTOR_3, usMotor_Status, usSpeed);
-  motorGo(MOTOR_4, usMotor_Status, usSpeed);
+  motorGo(MOTOR_3, usMotor_Status, (usSpeed+50)%250);
+  motorGo(MOTOR_4, usMotor_Status, (usSpeed+50)%250);
   usMotor_Status = CCW;
   motorGo(MOTOR_1, usMotor_Status, 0);
   motorGo(MOTOR_2, usMotor_Status, 0);
@@ -279,8 +332,8 @@ void TurnLeft()
 {
    Serial.println("TurnLeft");
   usMotor_Status = CW;
-  motorGo(MOTOR_1, usMotor_Status, usSpeed);
-  motorGo(MOTOR_2, usMotor_Status, usSpeed);
+  motorGo(MOTOR_1, usMotor_Status, (usSpeed+50)%250);
+  motorGo(MOTOR_2, usMotor_Status, (usSpeed+50)%250);
   usMotor_Status = CCW;
   motorGo(MOTOR_3, usMotor_Status, 0);
   motorGo(MOTOR_4, usMotor_Status, 0);  
