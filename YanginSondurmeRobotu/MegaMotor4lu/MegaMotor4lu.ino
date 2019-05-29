@@ -220,6 +220,7 @@ void loop()
         {
           Serial.println("Sensorden uzaklasiyor, donus yap.");
           //if
+          
           //sagadon
           //soladon
         }
