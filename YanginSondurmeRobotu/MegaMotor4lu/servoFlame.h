@@ -27,7 +27,7 @@ byte isFireClose(){
     myservomotor.write(derece);
     
   }
-  return returnValue;
+  return returnValue;//1:ates var, 0:ates yok
 }
 
 /*

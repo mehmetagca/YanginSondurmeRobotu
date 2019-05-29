@@ -1,6 +1,7 @@
 #include "ultrasonicTest.h"
 #include "queueFunctions.h"
 #include "sinyalArtis.h"
+#include "servoFlame.h"
 
 #define BRAKE 0
 #define CW    1
@@ -64,14 +65,16 @@
 //const int sensorPin= 0;
 //int smoke_level;
 
-short usSpeed = 30;  //default motor speed
+short usSpeed = 45;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
 
 byte atesCikti = 1;
 
 Queue<String> queue(10);
 byte sonSinyalDegeri = -1;
- 
+byte turningSpeed = 35;
+int signalControlTime = 2000;
+
 void setup()
 {
   setupUltra();
@@ -142,7 +145,7 @@ void loop()
   //while(Serial.available())
   while(true)//TEST
   {
-    rssi = -199; //Default
+    rssi = "0"; //-199; //Default
     
     if(Serial1.available())
       {
@@ -193,7 +196,7 @@ void loop()
       //TODO gelen ip bilgisine uygun diziye, rssi degeri push edilecek.
     }
 
-    if(millis() - sure > 3000)// 5sn
+    if(millis() - sure > signalControlTime)// 5sn
     {
       while(Serial.available())//Flush Serial Rx Buffer
         Serial.read();
@@ -223,10 +226,23 @@ void loop()
           Serial.println("Sensore yaklasiliyor, duz devam et.");
           if(sonSinyalDegeri != -1)
             {
-              if(sonSinyalDegeri > -55)//Dur
+              if(sonSinyalDegeri > -55 && sonSinyalDegeri != 0)//Dur
                 {
                   Stop();
                   delay(10000);
+                  
+                  servoSetup();
+                  while(true)
+                  {
+                    if(isFireClose() == 1)
+                      {
+                        Stop();
+                        while(true)
+                          isFireClose(); //Burada bekle, ates sonerse burada sonlanir.
+                      }
+                    else
+                      TurnLeft();
+                  }
                   sonSinyalDegeri = -1;
                 }
             }
@@ -235,7 +251,7 @@ void loop()
         {
           Serial.println("Sensorden uzaklasiyor, donus yap.");
           TurnLeft();
-          delay(3000);
+          delay(3200);
           //if
           //sagadon
           //soladon
@@ -322,8 +338,8 @@ void TurnRight()
 {
    Serial.println("TurnRight");
   usMotor_Status = CW;
-  motorGo(MOTOR_3, usMotor_Status, (usSpeed+50)%250);
-  motorGo(MOTOR_4, usMotor_Status, (usSpeed+50)%250);
+  motorGo(MOTOR_3, usMotor_Status, (usSpeed+turningSpeed)%250);
+  motorGo(MOTOR_4, usMotor_Status, (usSpeed+turningSpeed)%250);
   usMotor_Status = CCW;
   motorGo(MOTOR_1, usMotor_Status, 0);
   motorGo(MOTOR_2, usMotor_Status, 0);
@@ -332,8 +348,8 @@ void TurnLeft()
 {
    Serial.println("TurnLeft");
   usMotor_Status = CW;
-  motorGo(MOTOR_1, usMotor_Status, (usSpeed+50)%250);
-  motorGo(MOTOR_2, usMotor_Status, (usSpeed+50)%250);
+  motorGo(MOTOR_1, usMotor_Status, (usSpeed+turningSpeed)%250);
+  motorGo(MOTOR_2, usMotor_Status, (usSpeed+turningSpeed)%250);
   usMotor_Status = CCW;
   motorGo(MOTOR_3, usMotor_Status, 0);
   motorGo(MOTOR_4, usMotor_Status, 0);  
