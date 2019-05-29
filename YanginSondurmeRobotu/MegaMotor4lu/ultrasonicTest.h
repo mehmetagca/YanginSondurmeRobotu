@@ -45,7 +45,7 @@ int loopUltra()
 {
 
 //FlameBasi------------------------------
- yanginMesafe = flameSensorControl();
+ /*yanginMesafe = flameSensorControl();
  
  switch (yanginMesafe) 
  {
@@ -60,6 +60,7 @@ int loopUltra()
  break;
  }
  delay(1); // delay between reads
+ */
 /*
   if(yanginMesafe == 0)
   {
@@ -74,9 +75,9 @@ int loopUltra()
 
 //Ultrasonic---------------------------------
   /**********SAĞ SOL ORTA************/
-  mesafeSag = ultrasonicSensor(sagTrig, sagEcho);
-  mesafeSol = ultrasonicSensor(solTrig, solEcho);
-  mesafe = ultrasonicSensor(ortaTrig, ortaEcho);
+  //mesafeSag = ultrasonicSensor(sagTrig, sagEcho);
+  //mesafeSol = ultrasonicSensor(solTrig, solEcho);
+  //mesafe = ultrasonicSensor(ortaTrig, ortaEcho);
 
  return ultrasonicGelenDeger();
 //UltrasonicSonu---------------------------------
@@ -85,7 +86,7 @@ int loopUltra()
 int ultrasonicSensor(byte trig, byte echo)
 {
   digitalWrite(trig, LOW); /* sensör pasif hale getirildi */
-  delayMicroseconds(5);
+  delayMicroseconds(10);
   digitalWrite(trig, HIGH); /* Sensore ses dalgasının üretmesi için emir verildi */
   delayMicroseconds(10);
   digitalWrite(trig, LOW);  /* Yeni dalgaların üretilmemesi için trig pini LOW konumuna getirildi */ 
@@ -94,7 +95,7 @@ int ultrasonicSensor(byte trig, byte echo)
   if(uzaklik > 200)
     uzaklik = 200;
       
-  delay(25);
+  //delay(25);
   return uzaklik;
 }
 
