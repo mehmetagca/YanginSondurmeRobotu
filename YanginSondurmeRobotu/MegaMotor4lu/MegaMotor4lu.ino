@@ -68,7 +68,7 @@
 short usSpeed = 45;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
 
-byte atesCikti = 1;
+byte atesCikti = 0;
 
 Queue<String> queue(10);
 byte sonSinyalDegeri = -1;
@@ -229,16 +229,18 @@ void loop()
               if(sonSinyalDegeri > -55 && sonSinyalDegeri != 0)//Dur
                 {
                   Stop();
+                  servoSetup();
                   delay(10000);
                   
-                  servoSetup();
                   while(true)
                   {
                     if(isFireClose() == 1)
                       {
                         Stop();
                         while(true)
+                        {
                           isFireClose(); //Burada bekle, ates sonerse burada sonlanir.
+                        }
                       }
                     else
                       TurnLeft();

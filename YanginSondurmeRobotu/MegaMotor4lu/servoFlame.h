@@ -19,7 +19,7 @@ byte isFireClose(){
   int range = map(sensorReading, sensorMin, sensorMax, 0, 100);    
   Serial.print("range  : ");
   Serial.println(range);
-  if(range < 4)
+  if(range < 6)
   {
     derece=90;  // 180 derecelik açı yap
     myservomotor.write(derece);
