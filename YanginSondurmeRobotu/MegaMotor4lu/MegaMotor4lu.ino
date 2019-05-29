@@ -64,12 +64,13 @@
 //const int sensorPin= 0;
 //int smoke_level;
 
-short usSpeed = 40;  //default motor speed
+short usSpeed = 30;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
 
 byte atesCikti = 1;
 
 Queue<String> queue(10);
+byte sonSinyalDegeri = -1;
  
 void setup()
 {
@@ -146,7 +147,6 @@ void loop()
     if(Serial1.available())
       {
         rssi = Serial1.readStringUntil('\n');
-        //TODO: tum portu oku ve temizle
         Serial.print("Signal Value: ");
         Serial.println(rssi);
       }
@@ -193,21 +193,27 @@ void loop()
       //TODO gelen ip bilgisine uygun diziye, rssi degeri push edilecek.
     }
 
-    if(millis() - sure > 5000)// 5sn
+    if(millis() - sure > 3000)// 5sn
     {
+      while(Serial.available())//Flush Serial Rx Buffer
+        Serial.read();
+      
       if(user_input == '1' && queue.count() > 0)//Engel yoksa
       {
         String stringArray[10];
         int i = 0;
       
-        while(queue.count() > 0)
+        while(queue.count() > 0)//Queue to String Array
         {
           stringArray[i] = queue.pop();
         
           Serial.print(i);
           Serial.print("String:");
           Serial.print(stringArray[i]);
-        
+          
+          if(queue.count() == 0)
+            sonSinyalDegeri = stringArray[i].toInt();
+            
           i++;
         }
 
@@ -215,10 +221,21 @@ void loop()
         if(sinyalArtisDegeri == 1)
         {
           Serial.println("Sensore yaklasiliyor, duz devam et.");
+          if(sonSinyalDegeri != -1)
+            {
+              if(sonSinyalDegeri > -55)//Dur
+                {
+                  Stop();
+                  delay(10000);
+                  sonSinyalDegeri = -1;
+                }
+            }
         }
         else if(sinyalArtisDegeri == 0)
         {
           Serial.println("Sensorden uzaklasiyor, donus yap.");
+          TurnLeft();
+          delay(3000);
           //if
           //sagadon
           //soladon
@@ -305,8 +322,8 @@ void TurnRight()
 {
    Serial.println("TurnRight");
   usMotor_Status = CW;
-  motorGo(MOTOR_3, usMotor_Status, usSpeed);
-  motorGo(MOTOR_4, usMotor_Status, usSpeed);
+  motorGo(MOTOR_3, usMotor_Status, (usSpeed+50)%250);
+  motorGo(MOTOR_4, usMotor_Status, (usSpeed+50)%250);
   usMotor_Status = CCW;
   motorGo(MOTOR_1, usMotor_Status, 0);
   motorGo(MOTOR_2, usMotor_Status, 0);
@@ -315,8 +332,8 @@ void TurnLeft()
 {
    Serial.println("TurnLeft");
   usMotor_Status = CW;
-  motorGo(MOTOR_1, usMotor_Status, usSpeed);
-  motorGo(MOTOR_2, usMotor_Status, usSpeed);
+  motorGo(MOTOR_1, usMotor_Status, (usSpeed+50)%250);
+  motorGo(MOTOR_2, usMotor_Status, (usSpeed+50)%250);
   usMotor_Status = CCW;
   motorGo(MOTOR_3, usMotor_Status, 0);
   motorGo(MOTOR_4, usMotor_Status, 0);  

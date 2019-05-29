@@ -10,7 +10,7 @@
 		if (i > 0) {
 			oncekideger = dizi[i - 1].toInt();
 			Serial.print("oncekideger : ");
-			Serial.println(oncekideger);
+			Serial.print(oncekideger);
 		}
 
 		okunandeger = dizi[i].toInt();
@@ -26,14 +26,14 @@
 				kucuk++;
 			}
 		}
-
-		Serial.print("buyuk : ");
-		Serial.println(buyuk);
-
-		Serial.print("kucuk : ");
-		Serial.println(kucuk);
 	}
 	//while(1); // Sonsuz döngü, program kilitlendi.
+
+  Serial.print("\nbuyuk : ");
+  Serial.println(buyuk);
+
+  Serial.print("kucuk : ");
+  Serial.println(kucuk);
 
 	if (buyuk > kucuk)
 		return 1; // return 1 : sinyal artıyor
