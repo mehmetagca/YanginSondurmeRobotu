@@ -64,7 +64,7 @@
 //const int sensorPin= 0;
 //int smoke_level;
 
-short usSpeed = 40;  //default motor speed
+short usSpeed = 100;  //default motor speed
 unsigned short usMotor_Status = BRAKE;
 
 byte atesCikti = 1;
@@ -124,12 +124,20 @@ void setup()
   delay(5000);//TEST
 }
 
+int randValue() {
+   int r = rand();
+   return r;
+}
+
 void loop() 
 {
   digitalWrite(EN_PIN_1_R, HIGH);
   digitalWrite(EN_PIN_2_R, HIGH);
   digitalWrite(EN_PIN_1_L, HIGH);
   digitalWrite(EN_PIN_2_L, HIGH);
+
+
+
   
   char user_input;
   int donus = -1;
@@ -142,6 +150,9 @@ void loop()
   while(true)//TEST
   {
     rssi = -199; //Default
+
+    Serial.println("randValue");
+    Serial.println(randValue());
     
     if(Serial1.available())
       {
@@ -178,19 +189,10 @@ void loop()
       Serial.println(rssi);
       
       rssi[3] = '\0';
-      queue.pushToQueue(String(rssi));//Bu ana kuyruk olacak, diger kuyruklara ekleme asagidaki if de yapılacak.
+      queue.pushToQueue(String(rssi));
       
       Serial.println("Queue;");
       queue.printQueue();
-    }
-    else if(serialBuffer[0] == '+') // IP Info
-    {
-      Serial.print("Gelen rssi IP:");
-      Serial.println(rssi);
-      
-      rssi[3] = '\0';
-
-      //TODO gelen ip bilgisine uygun diziye, rssi degeri push edilecek.
     }
 
     if(millis() - sure > 5000)// 5sn
@@ -219,9 +221,6 @@ void loop()
         else if(sinyalArtisDegeri == 0)
         {
           Serial.println("Sensorden uzaklasiyor, donus yap.");
-          //if
-          //sagadon
-          //soladon
         }
         else
         {
@@ -303,7 +302,7 @@ void Reverse()
 }
 void TurnRight()
 {
-   Serial.println("TurnRight");
+  Serial.println("TurnRight");
   usMotor_Status = CW;
   motorGo(MOTOR_3, usMotor_Status, usSpeed);
   motorGo(MOTOR_4, usMotor_Status, usSpeed);

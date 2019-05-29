@@ -17,7 +17,7 @@
 		//Serial.print("okunandeger : "); 
 		//Serial.println(okunandeger);
 
-		if (oncekideger != 0) {
+		if (oncekideger != 0 || okunandeger !=0) {
 			if (okunandeger > oncekideger) {
 				buyuk++;
 			}
