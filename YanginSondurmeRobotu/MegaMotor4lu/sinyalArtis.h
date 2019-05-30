@@ -35,9 +35,9 @@
   Serial.print("kucuk : ");
   Serial.println(kucuk);
 
-	if ((buyuk - kucuk)>2)
+	if ((buyuk - kucuk)>0)
 		return 1; // return 1 : sinyal artıyor
-	else if((kucuk - buyuk)>2) 
+	else if((kucuk - buyuk)>1) 
 		return 0; // return 0 : sinyal azalıyor
   else
     return -1; // return -1 : sinyal değerleri eşit     

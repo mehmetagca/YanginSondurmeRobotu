@@ -232,7 +232,7 @@ void loop()
           Serial.println("Sensore yaklasiliyor, duz devam et.");
           if(sonSinyalDegeri != -1)
             {
-              if(sonSinyalDegeri > -55 && sonSinyalDegeri != 0)//Dur
+              if(sonSinyalDegeri > -60 && sonSinyalDegeri != 0)//Dur
                 {
                   Stop();
                   servoSetup();
