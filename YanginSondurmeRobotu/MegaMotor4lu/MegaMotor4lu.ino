@@ -74,6 +74,7 @@ Queue<String> queue(10);
 byte sonSinyalDegeri = -1;
 byte turningSpeed = 35;
 int signalControlTime = 2000;
+int serialFlushTime = 5000;
 
 void setup()
 {
@@ -141,8 +142,8 @@ void loop()
   String rssi;
   char serialBuffer[10];
   unsigned long sure = millis();
+  unsigned long serialTime = millis();
   
-  //while(Serial.available())
   while(true)//TEST
   {
     rssi = "0"; //-199; //Default
@@ -196,11 +197,16 @@ void loop()
       //TODO gelen ip bilgisine uygun diziye, rssi degeri push edilecek.
     }
 
-    if(millis() - sure > signalControlTime)// 5sn
+    if(millis() - serialTime > serialFlushTime)//Serial Clear
     {
       while(Serial.available())//Flush Serial Rx Buffer
         Serial.read();
-      
+
+      serialTime = millis();
+    }
+    
+    if(millis() - sure > signalControlTime)//Signal Control
+    {
       if(user_input == '1' && queue.count() > 0)//Engel yoksa
       {
         String stringArray[10];

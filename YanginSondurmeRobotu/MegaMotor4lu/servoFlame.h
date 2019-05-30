@@ -21,10 +21,10 @@ byte isFireClose(){
   Serial.println(range);
   if(range < 6)
   {
-    derece=90;  // 180 derecelik açı yap
+    derece=35;  // 0-180 derece
     myservomotor.write(derece);
     returnValue = 1;
-    //delay(10);   // her 1 derece açıyı 10 milisaniyede yapacak  
+    //delay(10);   // her 1 derece açıyı 10 milisaniyede yapacak
   }
   else{
     derece=0;
